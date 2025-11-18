@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Hierarchy - Glassmorphism</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- BODY & BACKGROUND --- */
+        body {
+            height: 100vh;
+            width: 100%;
+            /* Dark Green Gradient Background matching the image */
+            background: radial-gradient(circle at 50% 0%, #0f3d28 0%, #000000 80%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Adding the subtle "Grain" texture to the background */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Using a noise pattern url or generating via CSS (simplified here with opacity) */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- LIGHTING EFFECTS --- */
+        /* Green glow behind the card */
+        .glow-effect {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: #1db954;
+            filter: blur(150px);
+            border-radius: 50%;
+            top: 10%;
+            left: 20%;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        /* --- MAIN CARD CONTAINER --- */
+        .glass-card {
+            position: relative;
+            width: 700px;
+            height: 450px;
+            /* The Glass Effect: Semi-transparent background + Blur */
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            /* Thin, subtle border */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        /* The Grid lines inside the card */
+        .grid-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* --- THE "TAB" (Dear Designer) --- */
+        .card-tab {
+            position: absolute;
+            top: -50px; /* Pulling it out of the card slightly */
+            right: 100px;
+            background: #f0f0f0;
+            padding: 12px 30px;
+            border-radius: 15px;
+            color: #111;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 20;
+            transform: translateY(20px); /* Adjusting position */
+        }
+
+        /* --- TEXT CONTENT --- */
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 60%;
+        }
+
+        .meta-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        p.description {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        /* --- BUTTON --- */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: white;
+            color: black;
+        }
+
+        /* --- FOOTER INFO --- */
+        .footer-info {
+            position: absolute;
+            bottom: 30px;
+            left: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            align-items: center;
+        }
+        
+        .contact-info {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* --- DECORATIVE CUBES (CSS Shapes) --- */
+        /* Note: In a real production site, these would be a 3D image/GLB file. 
+           I am creating a CSS approximation here so the code works standalone. */
+        .cube-wrapper {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 300px;
+            height: 300px;
+            z-index: 20;
+        }
+        
+        /* A placeholder for the 3D cubes using a gradient box */
+        .cube-placeholder {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+            clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+            opacity: 0.8;
+            filter: blur(5px);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Decorative top left corner text */
+        .top-left-credit {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+        }
+        
+        /* Dot grid top right */
+        .dots {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+        }
+        .dot {
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="glow-effect"></div>
+
+    <div class="top-left-credit">
+        Contents and design by<br>
+        midecreativestudio<br>
+        &#8599;
+    </div>
+
+    <div class="dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+
+    <div class="glass-card">
+        <div class="card-tab">
+            Dear Designer
+        </div>
+
+        <div class="grid-background"></div>
+
+        <div class="content-wrapper">
+            <div class="meta-header">
+                <span>Daily dose</span>
+                <span>03. 11. 24</span>
+            </div>
+
+            <h1>What is Visual<br>Hierarchy?</h1>
+            <h2>Guiding the Eye;</h2>
+            
+            <p class="description">
+                Visual hierarchy is the arrangement of elements in a design to guide the viewer's eye.
+            </p>
+
+            <a href="#" class="btn">Good design matters...</a>
+        </div>
+
+        <div class="cube-wrapper">
+            <div class="cube-placeholder"></div>
+            </div>
+
+        <div class="footer-info">
+            <div class="contact-info">
+                <span>///</span>
+                <span>Contact:<br>+2349074331325</span>
+                <span>E-mail:<br>dadeyimide@gmail.com</span>
+            </div>
+            <div class="pagination">
+                2 of 6 >>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
