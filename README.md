@@ -31,6 +31,9 @@ A stunning, interactive glassmorphic design carousel showcasing visual design pr
 ### Ultrawide Display (20:9)
 ![Ultrawide View](https://github.com/user-attachments/assets/bc563649-61c8-4fc4-abff-230d80afdb67)
 
+### Mobile View (375x812)
+![Mobile View](https://github.com/user-attachments/assets/acd5589a-520f-4393-81aa-8a4f51078fa1)
+
 ## 🚀 Live Demo
 
 Visit the live site: **[https://anacondy.github.io/25--3-pro-test/](https://anacondy.github.io/25--3-pro-test/)**
